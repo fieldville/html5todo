@@ -1,0 +1,19 @@
+input[type="text"] {
+	width: 120px;
+}
+
+.complete {
+	color: #CCC;
+	text-decoration: line-through;
+}
+
+.remove {
+	font-size: 10px;
+	display: inline-block;
+	padding: 3px;
+	background: #C00;
+	color: #FFF;
+	border-radius: 5px;
+	margin: 0 0 0 5px;
+	cursor: pointer;
+}

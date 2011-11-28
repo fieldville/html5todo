@@ -1,11 +1,18 @@
-<html>
+<!DOCTYPE html>
+<html lang="ja" manifest="cache.manifest">
 <head>
-<script src="index.js" />
+  <title>HTML5 Todo Application</title>
+  <meta charset="utf-8">
+  <script src="js/jquery.js"></script>
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/main.css" media="all">
 </head>
-
 <body>
-	What's your name?
-	<input id="name" value="" />
-	<button onclick="sayHello()">sayHello!</button>
+  <h1>Todo アプリ</h1>
+  <form class="todoForm">
+    <input type="text" class="todoInput" placeholder="Todoを入力して下さい" required>
+    <input type="submit" value="add">
+  </form>
+  <ul class="todoList"></ul>
 </body>
 </html>
