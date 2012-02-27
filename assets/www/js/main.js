@@ -1,90 +1,59 @@
 $(function() {
-  var $list = $('.todoList');
-  var $input = $('.todoInput');
+  var todoList = $('.todoList');
+  var todoInput = $('.todoInput');
   var storage = window.localStorage;
 
-  /*
-   * Todoを追加する関数
-   */
   function addTodo(text, isComplete) {
-    // リストアイテムをつくる
-    var $li = $('<li>');
-    var $text = $('<span class="text">').text(text);
-    var $checkbox = $('<input type="checkbox">');
-    var $remove = $('<span class="remove">削除</span>');
-    $li.append($checkbox).append($text).append($remove);
+    var li = $('<li>');
+    var spanText = $('<span class="text">').text(text);
+    var checkbox = $('<input type="checkbox">');
+    var spanRemove = $('<span class="remove">削除</span>');
+    li.append(checkbox).append(spanText).append(spanRemove);
 
-    // 完了済みの場合の処理
     if (isComplete) {
-      $li.addClass('complete');
-      $checkbox.attr('checked', true);
+      li.addClass('complete');
+      checkbox.attr('checked', true);
     }
 
-    // チェックボックスをクリックしたときの処理
-    $checkbox.click(function() {
+    checkbox.click(function() {
       if ($(this).is(':checked')) {
-        $li.addClass('complete');
+        li.addClass('complete');
       }
       else {
-        $li.removeClass('complete');
+        li.removeClass('complete');
       }
       updateStorage();
     });
 
-    // 削除ボタンをクリックしたときの処理
-    $remove.click(function() {
+    spanRemove.click(function() {
       if (window.confirm('削除してよろしいですか？')) {
-        $li.fadeOut(function() {
-          $li.remove();
+        li.fadeOut(function() {
+          li.remove();
           updateStorage();
         });
       }
     });
-
-    // リストに追加する
-    $list.append($li);
+    todoList.append(li);
   }
 
-  /*
-   * ストレージを更新する関数
-   */
   function updateStorage() {
     var list = [];
-
-    // 現在のリスト情報を全て取得する
-    $list.find('li').each(function() {
-      var $item = $(this);
-
-      // テキストと完了かどうかを保存する
+    todoList.find('li').each(function() {
       list.push({
-        text: $item.find('.text').text(),
-        complete: $item.hasClass('complete')
+        text: $(this).find('.text').text(),
+        complete: $(this).hasClass('complete')
       });
     });
-
-    // 文字列にしてストレージに保存
     storage['todo.list'] = JSON.stringify(list);
   }
 
-  // フォームを送信したときの処理
   $('.todoForm').bind('submit', function(event) {
-    // フォームのデフォルトの動作を止める
     event.preventDefault();
-
-    // テキストボックスに入っている文字列を取得
-    var text = $input.val();
-
-    // todoを追加
-    addTodo(text);
-
-    // テキストボックスを空にする
-    $input.val('');
-
-    // ストレージの更新
+    addTodo(todoInput.val());
+    todoInput.val('');
     updateStorage();
   });
 
-  // 初期表示時にストレージからデータを復元する処理
   var storageList = storage['todo.list'];
   if (storageList) {
     JSON.parse(storageList).forEach(function(item) {
