@@ -1,0 +1,51 @@
+## coffee -csb
+$ ->
+  addTodo = (text, isComplete) ->
+    li = $("<li>")
+    spanText = $("<span class=\"text\">").text(text)
+    checkbox = $("<input type=\"checkbox\">")
+    spanRemove = $("<span class=\"remove\">削除</span>")
+    li.append(checkbox).append(spanText).append spanRemove
+    if isComplete
+      li.addClass "complete"
+      checkbox.attr "checked", true
+
+    checkbox.click ->
+      if $(this).is(":checked")
+        li.addClass "complete"
+      else
+        li.removeClass "complete"
+      updateStorage()
+
+    spanRemove.click ->
+      if window.confirm("削除してよろしいですか？")
+        li.fadeOut ->
+          li.remove()
+          updateStorage()
+
+    todoList.append li
+
+  updateStorage = ->
+    list = []
+    todoList.find("li").each ->
+      list.push
+        text: $(this).find(".text").text()
+        complete: $(this).hasClass("complete")
+
+    storage["todo.list"] = JSON.stringify(list)
+
+  todoList = $(".todoList")
+  todoInput = $(".todoInput")
+  storage = window.localStorage
+
+  $(".todoForm").bind "submit", (event) ->
+    event.preventDefault()
+    val = todoInput.val()
+    addTodo val if val
+    todoInput.val ""
+    updateStorage()
+
+  storageList = storage["todo.list"]
+  if storageList
+    JSON.parse(storageList).forEach (item) ->
+      addTodo item.text, item.complete

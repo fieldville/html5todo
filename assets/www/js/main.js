@@ -1,63 +1,60 @@
 $(function() {
-  var todoList = $('.todoList');
-  var todoInput = $('.todoInput');
-  var storage = window.localStorage;
-
-  function addTodo(text, isComplete) {
-    var li = $('<li>');
-    var spanText = $('<span class="text">').text(text);
-    var checkbox = $('<input type="checkbox">');
-    var spanRemove = $('<span class="remove">削除</span>');
+  var addTodo, storage, storageList, todoInput, todoList, updateStorage;
+  addTodo = function(text, isComplete) {
+    var checkbox, li, spanRemove, spanText;
+    li = $("<li>");
+    spanText = $("<span class=\"text\">").text(text);
+    checkbox = $("<input type=\"checkbox\">");
+    spanRemove = $("<span class=\"remove\">削除</span>");
     li.append(checkbox).append(spanText).append(spanRemove);
-
     if (isComplete) {
-      li.addClass('complete');
-      checkbox.attr('checked', true);
+      li.addClass("complete");
+      checkbox.attr("checked", true);
     }
-
     checkbox.click(function() {
-      if ($(this).is(':checked')) {
-        li.addClass('complete');
+      if ($(this).is(":checked")) {
+        li.addClass("complete");
+      } else {
+        li.removeClass("complete");
       }
-      else {
-        li.removeClass('complete');
-      }
-      updateStorage();
+      return updateStorage();
     });
-
     spanRemove.click(function() {
-      if (window.confirm('削除してよろしいですか？')) {
-        li.fadeOut(function() {
+      if (window.confirm("削除してよろしいですか？")) {
+        return li.fadeOut(function() {
           li.remove();
-          updateStorage();
+          return updateStorage();
         });
       }
     });
-    todoList.append(li);
-  }
-
-  function updateStorage() {
-    var list = [];
-    todoList.find('li').each(function() {
-      list.push({
-        text: $(this).find('.text').text(),
-        complete: $(this).hasClass('complete')
+    return todoList.append(li);
+  };
+  updateStorage = function() {
+    var list;
+    list = [];
+    todoList.find("li").each(function() {
+      return list.push({
+        text: $(this).find(".text").text(),
+        complete: $(this).hasClass("complete")
       });
     });
-    storage['todo.list'] = JSON.stringify(list);
-  }
-
-  $('.todoForm').bind('submit', function(event) {
+    return storage["todo.list"] = JSON.stringify(list);
+  };
+  todoList = $(".todoList");
+  todoInput = $(".todoInput");
+  storage = window.localStorage;
+  $(".todoForm").bind("submit", function(event) {
+    var val;
     event.preventDefault();
-    addTodo(todoInput.val());
-    todoInput.val('');
-    updateStorage();
+    val = todoInput.val();
+    if (val) addTodo(val);
+    todoInput.val("");
+    return updateStorage();
   });
-
-  var storageList = storage['todo.list'];
+  storageList = storage["todo.list"];
   if (storageList) {
-    JSON.parse(storageList).forEach(function(item) {
-      addTodo(item.text, item.complete);
+    return JSON.parse(storageList).forEach(function(item) {
+      return addTodo(item.text, item.complete);
     });
   }
 });
