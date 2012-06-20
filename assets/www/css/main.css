@@ -8,12 +8,12 @@ input[type="text"] {
 }
 
 .remove {
-	font-size: 10px;
 	display: inline-block;
 	padding: 3px;
-	background: #C00;
-	color: #FFF;
-	border-radius: 5px;
 	margin: 0 0 0 5px;
+	font-size: 10px;
+	color: #FFF;
 	cursor: pointer;
+	background: #C00;
+	border-radius: 5px;
 }
